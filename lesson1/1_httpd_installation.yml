@@ -1,0 +1,43 @@
+---
+- name: Httpd intall playbook
+  hosts: nodes
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: False
+
+  tasks:
+  - name: Install httpd
+    yum:
+      name: httpd
+      state: present
+  - name: Enable httpd
+    systemd:
+      name: httpd
+      enabled: yes
+  - name: Make sure a service unit httpd is running
+    systemd:
+      state: started
+      name: httpd
+  - name: Copy index.html
+    copy: src=/home/vagrant/ansible/lesson1/files/index.html dest=/var/www/html/index.html mode=0664
+  - name: Enable firewalld
+    systemd:
+      name: firewalld
+      enabled: yes
+  - name: Make sure a service unit firewalld is running
+    systemd:
+      state: started
+      name: firewalld
+  - name: permit http
+    firewalld:
+      service: http
+      permanent: true
+      state: enabled
+    notify: Firewald reload
+  handlers: 
+  - name: Firewald reload
+    systemd:
+      name: firewalld
+      state: reloaded

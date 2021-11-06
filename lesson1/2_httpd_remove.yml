@@ -1,0 +1,29 @@
+---
+- name: Httpd remove playbook
+  hosts: nodes
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: False
+
+  tasks:
+  - name: Remove httpd
+    yum:
+      name: httpd
+      state: absent
+  - name: Remove index.html 
+    file:
+      path: /var/www/html/index.html
+      state: absent
+  - name: Deny http
+    firewalld:
+      service: http
+      permanent: true
+      state: disabled
+    notify: Firewald reload
+  handlers:
+  - name: Firewald reload
+    systemd:
+      name: firewalld
+      state: reloaded

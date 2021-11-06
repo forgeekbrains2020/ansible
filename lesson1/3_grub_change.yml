@@ -1,0 +1,37 @@
+---
+- name: Httpd remove playbook
+  hosts: nodes
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: False
+
+  tasks:
+  - name: Reset audit=1, biosdevname=1 parameters to =0
+    lineinfile:
+      path: /etc/default/grub
+      state: present
+      backrefs: yes
+      regexp:  '^(GRUB_CMDLINE_LINUX=\".*){{ item }}=1(.*\")'
+      line: '\1{{ item }}=0\2'
+      backup: yes
+    notify: run grub2-mkconfig
+    loop:
+      - audit
+      - biosdevname
+  - name: Add audit=0, biosdevname=0 parametrs
+    lineinfile:
+      path: /etc/default/grub
+      state: present
+      backrefs: yes
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*{{ item }}.*)\".+)(\")'
+      line: '\1 {{ item }}=0\2'
+      backup: yes
+    notify: run grub2-mkconfig
+    loop:
+      - audit
+      - biosdevname
+  handlers:
+  - name: run grub2-mkconfig
+    command: grub2-mkconfig
