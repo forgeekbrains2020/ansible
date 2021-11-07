@@ -1,0 +1,3 @@
+[nodes]
+#node1.example.com
+node[1:2].example.com

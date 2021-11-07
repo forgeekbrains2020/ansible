@@ -1,0 +1,20 @@
+---
+- name: Add users on servers
+  hosts: nodes
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: False
+  vars_files:
+    - vars/users
+
+  tasks:
+  - name: add users
+    user:
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment }}"
+      home: "{{ item.value.home }}"
+      password: "{{ item.value.password | password_hash('sha512', 'mysecretsalt' )}}"
+      state: present
+    with_dict: "{{ users }}"
