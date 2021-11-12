@@ -15,6 +15,6 @@
       name: "{{ item.key }}"
       comment: "{{ item.value.comment }}"
       home: "{{ item.value.home }}"
-      password: "{{ item.value.password | password_hash('sha512', 'mysecretsalt' )}}"
+      password: "{{ item.value.password | password_hash('sha512', 'mysalt' )}}"
       state: present
     with_dict: "{{ users }}"

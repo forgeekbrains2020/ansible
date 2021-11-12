@@ -1,0 +1,6 @@
+---
+# handlers file for httpd_installation
+- name: Firewald reload
+  systemd:
+    name: firewalld
+    state: reloaded
