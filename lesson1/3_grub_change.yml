@@ -8,7 +8,7 @@
   gather_facts: False
 
   tasks:
-  - name: Reset audit=1, biosdevname=1 parameters to =0
+  - name: Reset net.ifnames=1, biosdevname=1 parameters to =0
     lineinfile:
       path: /etc/default/grub
       state: present
@@ -18,9 +18,9 @@
       backup: yes
     notify: run grub2-mkconfig
     loop:
-      - audit
+      - net.ifnames
       - biosdevname
-  - name: Add audit=0, biosdevname=0 parametrs
+  - name: Add net.ifnames=0, biosdevname=0 parametrs
     lineinfile:
       path: /etc/default/grub
       state: present
@@ -31,7 +31,7 @@
     notify: run grub2-mkconfig
     loop:
       - audit
-      - biosdevname
+      - net.ifnames
   handlers:
   - name: run grub2-mkconfig
     command: grub2-mkconfig
