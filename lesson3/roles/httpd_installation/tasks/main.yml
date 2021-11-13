@@ -6,24 +6,21 @@
   yum:
     name: httpd
     state: present
-- name: Enable http
+- name: Enable & start http
   systemd:
     name: httpd
     enabled: yes
-- name: Make sure a service unit httpd is running
-  systemd:
     state: started
-    name: httpd
 - name: Copy index.html
   template:
     src: index.html.j2
-    #dest: /var/www/html/index.html 
     dest: "{{ index_html_path }}"
     mode: 0664  
-- name: Enable firewalld
+- name: Enable & start firewalld
   systemd:
     name: firewalld
     enabled: yes
+    state: started
 - name: permit http
   firewalld:
     service: http

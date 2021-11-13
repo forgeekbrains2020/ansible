@@ -1,11 +1,6 @@
 ---
 - name: httpd install playbook
   hosts: nodes
-  become: ansible
-  become_method: sudo
-  become: yes
-  become_user: root
-  #gather_facts: False
 
 
   roles:
