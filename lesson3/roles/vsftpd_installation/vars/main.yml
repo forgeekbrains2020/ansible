@@ -1,0 +1,12 @@
+---
+# vars file for vsftpd_installation
+anonymous_enable: YES
+local_enable: NO
+write_enable: YES
+anon_upload_enable: YES
+anon_root: /var/ftp
+vsftpd_config: /etc/vsftpd/vsftpd.conf
+upload_dir: /var/ftp/pub/upload
+
+
+

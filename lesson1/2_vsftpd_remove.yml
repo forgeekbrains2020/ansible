@@ -1,0 +1,39 @@
+---
+- name: Vstfpd remove playbook
+  hosts: nodes
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: False
+
+  tasks:
+  - name: Remove vsftpdd
+    yum:
+      name: vsftp
+      state: removed
+  - name: Deny vsftpd
+    firewalld:
+      port: 21/tcp
+      permanent: true
+      state: disabled
+    notify: Firewald reload
+  - name: Deny vvsftpd
+    firewalld:
+      port: 40900-40999/tcp
+      permanent: true
+      state: disabled
+    notify: Firewald reload
+  - name: Permit ftp
+    firewalld:
+      service: ftp
+      state: disabled
+      immediate: true
+      permanent: true
+    notify: Firewald reload
+
+  handlers:
+  - name: Firewald reload
+    systemd:
+      name: firewalld
+      state: reloaded

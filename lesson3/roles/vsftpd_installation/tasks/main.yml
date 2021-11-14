@@ -1,0 +1,34 @@
+---
+# tasks file for vsftpd_installation
+- name: Install vsftpd
+  yum:
+    name: vsftpd
+    state: present
+- name: Copy vsftpd.conf
+  template:
+    src: vsftpd.j2
+    dest: "{{ vsftpd_config }}"
+    mode: 0664
+- name: Enable & start vsftpd
+  systemd:
+    name: vsftpd
+    enabled: yes
+    state: started
+- name: Set allow_ftpd_full_access on
+  command: setsebool -P allow_ftpd_full_access on
+- name: Set ftpd_anon_write on
+  command: setsebool -P ftpd_anon_write on
+- name: Create upload folder
+  file:
+    path: "{{ upload_dir }}"
+    state: directory
+    mode: '0755'
+    owner: ftp
+    group: ftp
+- name: Permit ftp
+  firewalld:
+    service: ftp
+    state: enabled
+    immediate: true
+    permanent: true
+  notify: Firewald reload
