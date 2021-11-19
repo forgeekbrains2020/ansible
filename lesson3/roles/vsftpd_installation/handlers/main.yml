@@ -1,2 +1,6 @@
 ---
 # handlers file for vsftpd_installation
+- name: Firewald reload
+  systemd:
+    name: firewalld
+    state: reloaded

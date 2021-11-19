@@ -1,5 +1,7 @@
 ---
 # vars file for vsftpd_installation
+
+# vars for vsftpd.conf
 anonymous_enable: YES
 local_enable: NO
 write_enable: YES
@@ -8,5 +10,6 @@ anon_root: /var/ftp
 vsftpd_config: /etc/vsftpd/vsftpd.conf
 upload_dir: /var/ftp/pub/upload
 
-
+# vars for confifre selinux
+context: public_content_rw_t
 

@@ -1,38 +1,27 @@
-Role Name
+Role Name - vsftpd_installation
 =========
 
-A brief description of the role goes here.
+Роль устанавливает и включает FTP (пакет vsftpd) с анонимным доступом в каталог /var/ftp/pub и возможностью записи в /var/ftp/pub/upload
+Устанавливает SELinux контекст ftpd_anon_write в значение on, назначает public_content_rw_t на каталог /var/ftp/pub/upload.
 
-Requirements
-------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+# vars for vsftpd.conf
+anonymous_enable: YES
+local_enable: NO
+write_enable: YES
+anon_upload_enable: YES
+anon_root: /var/ftp
+vsftpd_config: /etc/vsftpd/vsftpd.conf
+upload_dir: /var/ftp/pub/upload
 
-Dependencies
-------------
+# vars for configure selinux context for /var/ftp/pub/upload
+context: public_content_rw_t
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Aleksandr Iashin

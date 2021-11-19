@@ -14,10 +14,6 @@
     name: vsftpd
     enabled: yes
     state: started
-- name: Set allow_ftpd_full_access on
-  command: setsebool -P allow_ftpd_full_access on
-- name: Set ftpd_anon_write on
-  command: setsebool -P ftpd_anon_write on
 - name: Create upload folder
   file:
     path: "{{ upload_dir }}"
@@ -25,6 +21,12 @@
     mode: '0755'
     owner: ftp
     group: ftp
+- name: Set ftpd_anon_write on
+  command: setsebool -P ftpd_anon_write on
+    #- name: Set allow_ftpd_full_access on
+    # command: setsebool -P allow_ftpd_full_access on
+- name: Set context {{ context }} for {{ upload_dir }}
+  command: chcon -Rv --type={{ context }} {{ upload_dir }}
 - name: Permit ftp
   firewalld:
     service: ftp
